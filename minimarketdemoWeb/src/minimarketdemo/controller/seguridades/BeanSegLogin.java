@@ -39,6 +39,7 @@ public class BeanSegLogin implements Serializable {
 		return "";
 	}
 	
+	
 	public String actionMenu(String ruta) {
 		return ruta+"?faces-redirect=true";
 	}

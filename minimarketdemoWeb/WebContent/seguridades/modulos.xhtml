@@ -61,6 +61,8 @@
 					<p:commandButton icon="pi pi-pencil" title="editar"
 						actionListener="#{beanSegModulos.actionListenerCargarModulo(m)}"
 						oncomplete="PF('dialogoEdicion').show()" update=":formEdicion" />
+					
+					
 					<p:commandButton icon="pi pi-times-circle" title="eliminar"
 						styleClass="ui-button-danger" update="@form"
 						actionListener="#{beanSegModulos.actionListenerEliminarModulo(m.idSegModulo)}">
