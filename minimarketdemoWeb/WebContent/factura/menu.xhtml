@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<f:metadata>
+	<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
+		type="preRenderView"></f:event> 
+</f:metadata>
+<h:head></h:head>
+<body>
+	<h:form>
+		<p:menubar>
+			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
+			<p:menuitem value="Productos" icon="pi pi-briefcase" />			
+				<f:facet name="options">						
+				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
+					icon="pi pi-user">
+					<p:menuitem value="Perfil" icon="pi pi-cog"></p:menuitem>
+					<p:menuitem value="Cerrar sesión" icon="pi pi-sign-out"
+						action="#{beanSegLogin.actionCerrarSesion()}"></p:menuitem>
+				</p:menuButton>
+			</f:facet>
+			
+		</p:menubar>
+	</h:form>
+		<h:form id="formFacturas">
+		<p:growl id="mensajeGeneral" showDetail="true" autoUpdate="true"
+			life="3000"></p:growl>
+		<p:panel id="panel" styleClass="panel">
+			<f:facet name="header">
+				<h:outputText value="Módulo Facturación" />
+			</f:facet>
+
+
+			<p:staticMessage severity="info" summary="Ingresar Cliente"></p:staticMessage>
+			<p:panelGrid id="GridBuscarDatosCliente" columns="5">
+				<p:outputLabel value="Código cliente:" />
+				<p:inputText id="txtBuscarCliente"
+					value="#{beancliente.codigoCliente}" style="font-size: 12pt" />
+				<p:commandButton value="Buscar"
+					actionListener="#{beanCliente.agregarDatosCliente()}"
+					resetValues="true" update=":formFacturas:gridDatosCliente"
+					icon="pi pi-search" />
+				<p:commandButton value="Ver Clientes"
+					oncomplete="PF('dialogoClientes').show();"
+					icon="pi pi-external-link" />
+				<p:commandButton value="Nuevo Cliente" icon="pi pi-pencil" />
+			</p:panelGrid>
+			<!-- Método para buscar cliente en value  en beancliente.codigoCliente, en update es para actualizar los datos del cliente y en Modificar traer otro cliente-->
+			<p:separator />
+
+
+
+			<h:panelGrid id="gridDatosCliente" columns="2">
+				<h:panelGrid>
+					<p:staticMessage severity="info" summary="Detalles del Cliente"></p:staticMessage>
+					<p:outputLabel value="Nombre:" />
+					<p:outputLabel id="lblNombreCliente"
+						value="#{beancliente.cliente.cliNombres} #{beancliente.cliente.cliApellidos}" />
+					<p:outputLabel value="Dirección:" />
+					<p:outputLabel id="lblDireccionCliente"
+						value="#{beancliente.cliente.cliDireccion}" />
+					<p:outputLabel value="Teléfono:" />
+					<p:outputLabel id="lblTelefonoCLiente"
+						value="#{beancliente.cliente.cliTelefono}" />
+					<p:outputLabel value="Correo:" />
+					<p:outputLabel id="lblCorreoCliente"
+						value="#{beancliente.cliente.cliCorreo}" />
+					<!-- Métodos para traer datos del cliente -->
+				</h:panelGrid>
+				<h:panelGrid>
+					<p:staticMessage severity="info" summary="Detalles de la Factura"></p:staticMessage>
+					<h:outputLabel value="FACTURA #:" style="font-size: 20pt;color:red" />
+					<h:outputLabel value="#{beanfactura.factura.idFactura}"
+						style="font-size: 20pt; color:red" />
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Fecha:" />
+						<p:clock pattern="dd/MMM/yyyy   HH:mm:ss" />
+					</h:panelGrid>
+					<!-- Traer método para idfactura -->
+				</h:panelGrid>
+			</h:panelGrid>
+
+			<p:separator />
+			<p:panelGrid columns="4">
+				<p:outputLabel value="Código de Producto:" />
+				<p:inputText size="12" />
+				<p:commandButton value="Buscar" styleClass="btnModificar"
+					icon="pi pi-search" />
+				<p:commandButton value="Ver Productos" styleClass="btnModificar"
+					oncomplete="PF('dialogoProducto').show();"
+					icon="pi pi-external-link" />
+			</p:panelGrid>
+			<p:separator />
+
+			<p:dataTable id="tablaProductos" var="producto"
+				value="#{ventasbeen.listadetallefactura}"
+				rowStyleClass="ejemplo, ejemplo2"
+				emptyMessage="No se han encontrado registros."
+				styleClass="table table-bordered table-striped">
+				<f:facet name="header">
+					<h:outputText value="Productos" style="color: white;" />
+				</f:facet>
+				<p:column headerText="Código de Producto">
+					<h:outputText value="#{beanProducto.producto.proCodigoBarra}" />
+				</p:column>
+				<p:column headerText="Producto">
+					<h:outputText value="#{beanProducto.producto.proNombre}" />
+				</p:column>
+				<p:column headerText="Cantidad">
+					<h:outputText value=" 1/u " />
+				</p:column>
+				<p:column headerText="Precio venta">
+					<h:outputText value="#{beanProducto.producto.proPrecio}" />
+				</p:column>
+				<p:column headerText="Total">
+				</p:column>
+			</p:dataTable>
+
+			<h:panelGrid>
+				<p:outputLabel value="Subtotal: " style="font-size: 15pt" />
+				<p:outputLabel value="IVA: " style="font-size: 15pt" />
+				<p:outputLabel style="font-size: 20pt" value="Total: " />
+			</h:panelGrid>
+
+			<p:separator />
+			<p:commandButton value="Registrar" icon="pi pi-briefcase"
+				styleClass="ui-button-success" />
+			<p:commandButton value="Imprimir" icon="pi pi-print" />
+			<p:commandButton value="Cancelar" icon="pi pi-trash"
+				styleClass="ui-button-danger" />
+		</p:panel>
+
+
+		<!--Dialogo Cliente -->
+		<p:dialog id="dlgClientes" widgetVar="dialogoClientes" modal="true"
+			showEffect="explode" hideEffect="explode"
+			styleClass="dialogoClientes" resizable="false" position="center"
+			responsive="true" draggable="false" closeOnEscape="true">
+			<p:dataTable id="tablaClientes" paginator="true"
+				paginatorPosition="top" style="width: 700px;" var="cl"
+				value="#{beancliente.listaClientes}" rows="5">
+				<f:facet name="header">
+					<h:outputText value="Clientes" style="color: white;" />
+				</f:facet>
+				<p:column headerText="N°">
+					<h:outputText value="#{cl.idCliente}" />
+				</p:column>
+				<p:column headerText="Nombre">
+					<h:outputText value="#{cl.cliNombre} #{cl.cliApellidos}" />
+				</p:column>
+				<p:column headerText="Dirección">
+					<h:outputText value="#{cl.cliDireccion}" />
+				</p:column>
+				<p:column headerText="Teléfono">
+					<h:outputText value="#{cl.cliTelefono}" />
+				</p:column>
+				<p:column headerText="Correo">
+					<h:outputText value="#{cl.cliCorreo}" />
+				</p:column>
+				<p:column headerText="Seleccionar">
+
+					<p:commandButton value="Seleccionar"
+						style="background: #158B4C; color:#FEFEFE; "
+						actionListener="#{beancliente.agregarDatosCliente(cl.idCliente)}"
+						oncomplete="PF('dialogoClientes').hide();"
+						update=":formFacturas:gridDatosCliente">
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			<center>
+				<p:separator></p:separator>
+				<p:commandButton value="cerrar"
+					style="background: Red; color:#FEFEFE; "
+					onclick="PF('dialogoClientes').hide();" />
+			</center>
+		</p:dialog>
+
+		<!--Dialogo Producto -->
+		<p:dialog id="dlgProducto" widgetVar="dialogoProducto" modal="true"
+			showEffect="explode" hideEffect="explode"
+			styleClass="dialogoClientes" resizable="false" position="center"
+			responsive="true" draggable="false" closeOnEscape="true">
+
+
+
+			<p:dataTable id="tablaProdAUX" paginator="true"
+				paginatorPosition="top" style="width: 700px;" var="pro"
+				value="#{DetalleProductoBeen.listadelatte}" rows="5">
+				<f:facet name="header">
+					<h:outputText value="Producto" style="color: white;" />
+				</f:facet>
+				<p:column headerText="N°">
+					<h:outputText value="#{pro.producto.idProducto}" />
+				</p:column>
+				<p:column headerText="Nombre">
+					<h:outputText value="#{pro.producto.proNombre}" />
+				</p:column>
+				<p:column headerText="Precio">
+					<h:outputText value="#{pro.producto.proPrecio}" />
+				</p:column>
+				<p:column headerText="Seleccionar">
+					<p:commandButton value="Seleccionar" styleClass="btnModificar"
+						actionListener="#{ventasbeen.agregarDatosProducto(pro.producto.proCodigoBarra)}"
+						onclick="PF('dialogoProducto').hide();"
+						update=":formFacturas:tablaProductos">
+
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			<center>
+				<p:separator />
+				<p:commandButton value="cerrar"
+					style="background: #B40404; color:#FEFEFE; "
+					onclick="PF('dialogoProducto').hide();" />
+			</center>
+		</p:dialog>
+	</h:form>
+</body>
+</html>
