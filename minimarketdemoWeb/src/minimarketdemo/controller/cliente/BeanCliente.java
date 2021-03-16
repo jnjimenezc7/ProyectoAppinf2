@@ -34,10 +34,28 @@ public class BeanCliente implements Serializable {
 		edicionCliente=new TblCliente();
 	}
 
+	
 	public List<TblCliente> getListaClientes() {
 		return listaClientes;
 	}
 
+	public void actionListenerFindClienteByCedula(String cedula)  {
+		
+		
+		
+	try {
+		mCliente.findClienteByCedula(cedula);
+		JSFUtil.crearMensajeINFO("Usuario encontrado");
+	} catch (Exception e) {
+		JSFUtil.crearMensajeERROR(e.getMessage());
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+	
+	
+	
+	}
 	public void setListaClientes(List<TblCliente> listaClientes) {
 		this.listaClientes = listaClientes;
 	}
