@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	>
+	
+<f:metadata>
+	<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
+		type="preRenderView"></f:event>
+</f:metadata>
+
+<h:head>
+</h:head>
+<body>
+	<p:growl>
+		<p:autoUpdate>
+		</p:autoUpdate>
+	</p:growl>
+	<h:form>
+		<p:menubar>
+			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
+			<f:facet name="options">
+				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
+					icon="pi pi-user">
+					<p:menuitem value="Perfil" icon="pi pi-cog"></p:menuitem>
+					<p:menuitem value="Cerrar sesión" icon="pi pi-sign-out"
+						action="#{beanSegLogin.actionCerrarSesion()}"></p:menuitem>
+				</p:menuButton>
+			</f:facet>
+		</p:menubar>
+		<p:staticMessage severity="info" summary="Clientes"></p:staticMessage>
+	</h:form>
+
+
+
+	<h:form>
+		<p:panel header="Nuevo Cliente" collapsed="true" toggleable="true">
+			<h:panelGrid columns="2">
+
+				<h:outputText value="ID:" />
+				<p:inputText required="true"
+					value="#{beanCliente.nuevoCliente.idCliente}"
+					requiredMessage="Debe ingresar el id"></p:inputText>
+
+
+				<h:outputText value="Identificación:" />
+				<p:inputText required="true"
+					value="#{beanCliente.nuevoCliente.identificacion}"
+					requiredMessage="Debe ingresar el documento de identidad"></p:inputText>
+
+				<h:outputText value="Nombres:" />
+				<p:inputText required="true"
+					value="#{beanCliente.nuevoCliente.nombres}"
+					requiredMessage="Debe ingresar el nombre del cliente">
+				</p:inputText>
+
+				<h:outputText value="Fecha Nacimiento:" />
+				<p:datePicker required="true"
+					value="#{beanCliente.nuevoCliente.fechaNacimiento}"
+					requiredMessage="Ingrese la fecha de nacimiento">
+				</p:datePicker>
+
+
+				<h:outputText value="Ciudad de Nacimiento:" />
+				<p:inputText required="true"
+					value="#{beanCliente.nuevoCliente.ciudadNacimiento}"
+					requiredMessage="Debe ingresar la ciudad de nacimiento">
+				</p:inputText>
+
+
+				<h:outputText value="Credito:" />
+				<p:selectBooleanCheckbox value="#{beanCliente.nuevoCliente.credito}"
+					required="true" requiredMessage="Debe ingresar el correo">
+				</p:selectBooleanCheckbox>
+
+				<h:outputText value="Limite de credito:" />
+				<p:inputNumber required="true"
+					value="#{beanCliente.nuevoCliente.valorLimiteCredito}"
+					requiredMessage="Debe ingresar el limite de credito">
+				</p:inputNumber>
+
+
+				<h:outputText value="Dirección:" />
+				<p:inputText required="true"
+					value="#{beanCliente.nuevoCliente.direccion}"
+					requiredMessage="Debe ingresar la Dirección del cliente">
+				</p:inputText>
+
+				<h:outputText value="Telefono:" />
+				<p:inputText required="true"
+					value="#{beanCliente.nuevoCliente.telefono}"
+					requiredMessage="Debe ingresar el telefono del cliente">
+				</p:inputText>
+
+				<h:outputText value="Correo:" />
+				<p:inputText required="true"
+					value="#{beanCliente.nuevoCliente.correo}"
+					requiredMessage="Debe ingresar el correo del cliente">
+				</p:inputText>
+
+				<h:outputText value="Estado:" />
+				<p:selectBooleanCheckbox value="#{beanCliente.nuevoCliente.estado}"
+					required="true"
+					requiredMessage="Debe ingresar el estado del cliente">
+				</p:selectBooleanCheckbox>
+
+
+				<p:commandButton value="Aceptar" update="@form:,formDatos"
+					action="#{beanCliente.actionListenerInsertarCliente()}"
+					icon="pi pi-save">
+				</p:commandButton>
+			</h:panelGrid>
+		</p:panel>
+	</h:form>
+
+
+
+	<p:panel header="Lista de Clientes">
+		<h:form id="formDatos">
+			<p:dataTable value="#{beanCliente.listaClientes}" var="u">
+				<p:column headerText="Identificación">
+					<h:outputText value="#{u.identificacion}" />
+				</p:column>
+				<p:column headerText="Nombres">
+					<h:outputText value="#{u.nombres}" />
+				</p:column>
+				<p:column headerText="Fecha Nacimiento">
+					<h:outputText value="#{u.fechaNacimiento}" />
+				</p:column>
+
+				<p:column headerText="Ciudad de Nacimiento">
+					<h:outputText value="#{u.ciudadNacimiento}" />
+				</p:column>
+
+				<p:column headerText="credito">
+					<h:outputText value="#{u.credito}" />
+				</p:column>
+
+				<p:column headerText="limite de credito">
+					<h:outputText value="#{u.valorLimiteCredito}" />
+				</p:column>
+
+				<p:column headerText="Dirección">
+					<h:outputText value="#{u.direccion}" />
+				</p:column>
+
+				<p:column headerText="Telefono">
+					<h:outputText value="#{u.telefono}" />
+				</p:column>
+				<p:column headerText="Correo">
+					<h:outputText value="#{u.correo}" />
+				</p:column>
+
+
+				<p:column headerText="Estado">
+					<h:outputText value="#{u.estado}" />
+				</p:column>
+
+				<p:column headerText="OPCIONES">
+					<p:commandButton icon="pi pi-pencil" title="eliminar"
+						actionListener="#{beanCliente.actionListenerCargarCliente(u)}"
+						oncomplete="PF('dialogoEdicion').show()" update=":formEdicion">
+					</p:commandButton>
+					<p:commandButton icon="pi pi-trash" title="editar"></p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</p:panel>
+
+	<p:dialog header="Edición" widgetVar="dialogoEdicion">
+		<h:form id="formEdicion">
+			
+			<div class="card">
+				<p:panelGrid columns="4" layout="grid">
+					<p:outputLabel value="Identificacion" />
+					<p:inputText value="#{beanCliente.edicionCliente.identificacion}"
+						required="true"
+						requiredMessage="Ingrese el documento de identificacion." />
+
+					<p:outputLabel value="Nombres:" />
+					<p:inputText value="#{beanCliente.edicionCliente.nombres}"
+						required="true" requiredMessage="Ingrese el nombre del Cliente." />
+
+					<p:outputLabel value="Nombres:" />
+					<p:datePicker value="#{beanCliente.edicionCliente.fechaNacimiento}"
+						required="true"
+						requiredMessage="Ingrese la fecha de nacimiento del Cliente." />
+
+					<h:outputText value="Nombres:" />
+					<p:inputText value="#{beanCliente.edicionCliente.ciudadNacimiento}"
+						required="true"
+						requiredMessage="Ingrese la ciudad de nacimiento del Cliente." />
+
+					<h:outputText value="Credito:" />
+					<p:selectBooleanCheckbox
+						value="#{beanCliente.edicionCliente.credito}" required="true"
+						requiredMessage="Ingrese si el cliente cuenta con credito." />
+
+					<h:outputText value="limite de credito:" />
+					<p:inputNumber
+						value="#{beanCliente.edicionCliente.valorLimiteCredito}"
+						required="true"
+						requiredMessage="Ingrese el valor limite de credito del cliente." />
+
+					<h:outputText value="Dirección:" />
+					<p:inputText value="#{beanCliente.edicionCliente.direccion}"
+						required="true"
+						requiredMessage="Ingrese la direccion del cliente." />
+
+					<h:outputText value="Telefono:" />
+					<p:inputText value="#{beanCliente.edicionCliente.telefono}"
+						required="true" requiredMessage="Ingrese el telefono del cliente." />
+
+					<h:outputText value="Correo:" />
+					<p:inputText value="#{beanCliente.edicionCliente.correo}"
+						required="true" requiredMessage="Ingrese el correo del cliente." />
+
+					<h:outputText value="Estado:" />
+					<p:selectBooleanCheckbox
+						value="#{beanCliente.edicionCliente.estado}" required="true"
+						requiredMessage="Ingrese el valor limite de credito del cliente." />
+						
+					<p:commandButton value="Guardar" icon="pi pi-save" update="@form,:formDatos"
+						actionListener="#{beanCliente.actionListenerGuardarEdicionCliente()}"></p:commandButton>
+
+				</p:panelGrid>
+			</div>
+		</h:form>
+	</p:dialog>
+	<div></div>
+	
+</body>
+
+</html>
+
