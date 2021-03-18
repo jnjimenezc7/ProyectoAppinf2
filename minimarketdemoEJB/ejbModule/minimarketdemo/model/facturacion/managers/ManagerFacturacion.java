@@ -29,5 +29,7 @@ public class ManagerFacturacion {
     public List<TblFactura> findAllFacturas(){
     	return em.createNamedQuery("TblFactura.findAll", TblFactura.class).getResultList();
     }
+    
+    
 
 }

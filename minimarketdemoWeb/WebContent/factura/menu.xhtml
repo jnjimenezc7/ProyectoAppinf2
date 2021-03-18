@@ -104,12 +104,14 @@
 			<p:separator />
 			<p:panelGrid columns="4">
 				<p:outputLabel value="Código de Producto:" />
-				<p:inputText size="12" />
-				<p:commandButton value="Buscar" styleClass="btnModificar"
+				<p:inputText id="txtBuscarProducto" value="#{beanProducto.codigoProd}"
+					style="font-size: 12pt" />
+				<p:commandButton value="Buscar" 
+					actionListener="#{beanProducto.actionListenerfindProductosByCodigo()}"
 					icon="pi pi-search" />
-				<p:commandButton value="Ver Productos" styleClass="btnModificar"
+				<!-- <p:commandButton value="Ver Productos" styleClass="btnModificar"
 					oncomplete="PF('dialogoProducto').show();"
-					icon="pi pi-external-link" />
+					icon="pi pi-external-link" /> -->
 			</p:panelGrid>
 			<p:separator />
 

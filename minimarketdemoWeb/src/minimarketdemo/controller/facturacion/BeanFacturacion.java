@@ -40,7 +40,14 @@ public class BeanFacturacion implements Serializable {
 	public void actionListenerfindByIdCliente() {
 		try {
 			 cliente = managerCliente.findClienteByCedula(cedula);
+			 if(cliente.getEstado())
 			JSFUtil.crearMensajeINFO("Usuario encontrdo");
+			
+			if(cliente.getEstado()==false) {
+				JSFUtil.crearMensajeWARN("Usuario no esta activo");
+				cliente=new TblCliente();
+			}
+				
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			cliente=new TblCliente();

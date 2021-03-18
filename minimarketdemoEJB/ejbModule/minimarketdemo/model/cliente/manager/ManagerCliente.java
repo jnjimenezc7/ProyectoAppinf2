@@ -39,9 +39,11 @@ public class ManagerCliente {
 	}
 
 	public TblCliente findClienteByCedula(String cedula){
+		TblCliente c;
 		String sql = "Select b from TblCliente b where b.identificacion=:cedula";
 		Query q = em.createQuery(sql, TblCliente.class).setParameter("cedula", cedula);
-	return (TblCliente) q.getSingleResult();
+		c = (TblCliente) q.getSingleResult();
+		return c;
 	}
 
 	public void insertarCliente(TblCliente nuevoCliente) throws Exception {
