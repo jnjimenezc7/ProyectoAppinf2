@@ -49,6 +49,7 @@ public class BeanCliente implements Serializable {
 		}
 		
 		listaClientes = mCliente.findAllUsuario();
+		
 		nuevoCliente = new TblCliente();
 		edicionCliente = new TblCliente();
 
