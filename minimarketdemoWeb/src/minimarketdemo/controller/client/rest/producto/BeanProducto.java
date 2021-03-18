@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
 import minimarketdemo.controller.JSFUtil;
+import minimarketdemo.model.producto.managers.ManagerProducto;
 import minimarketdemo.model.productos.dto.DTOInvProductos;
 
 @Named
@@ -17,6 +19,8 @@ public class BeanProducto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@EJB
+	private ManagerProducto managerProducto;
 	private List<DTOInvProductos> listProductos;
 	private List<DTOInvProductos> listProductosEncontrados;
 	private String codigoProd;
@@ -28,24 +32,16 @@ public class BeanProducto implements Serializable {
 
 	@PostConstruct
 	public void inicializar() {
-	  listProductos=clienteListProductos();
+	  listProductos=managerProducto.ObtenerDatos();
 	}
 
-	public List<DTOInvProductos> clienteListProductos() {
-	List<DTOInvProductos> lista=new ArrayList<DTOInvProductos>();
-		lista.add(new DTOInvProductos("Pord0001", true, 3.0, "azucar", 3.10, 5, 2));
-		lista.add(new DTOInvProductos("Pord0002", true, 3.0, "azucar", 3.10, 5, 2));
-		lista.add(new DTOInvProductos("Pord0003", true, 3.0, "azucar", 3.10, 5, 2));
-		lista.add(new DTOInvProductos("Pord0004", true, 3.0, "azucar", 3.10, 5, 2));
-		lista.add(new DTOInvProductos("Pord0005", true, 3.0, "azucar", 3.10, 5, 2));
-		return lista;
-	}
+	
 
 	
 	public void actionListenerfindProductosByCodigo() {
 		boolean encontrado=false;
 		for (DTOInvProductos dtoInvProductos : listProductos) {
-			if(dtoInvProductos.getCodigoProducto().equals(codigoProd)) {
+			if(dtoInvProductos.getCodproducto().equals(codigoProd)) {
 				encontrado=true;
 				//listProductosEncontrados.add(dtoInvProductos);
 			}

@@ -1,5 +1,8 @@
 package minimarketdemo.model.producto.managers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.ws.rs.client.Client;
@@ -17,25 +20,26 @@ import minimarketdemo.model.productos.dto.DTOInvProductos;
 @LocalBean
 public class ManagerProducto {
 
-    /**
-     * Default constructor. 
-     */
-    public ManagerProducto() {
-        // TODO Auto-generated constructor stub
-    }
-    
-    public void ObtenerDatos() {
-    	Client c = ClientBuilder.newClient();
+	/**
+	 * Default constructor.
+	 */
+	public ManagerProducto() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public List<DTOInvProductos> ObtenerDatos() {
+		Client c = ClientBuilder.newClient();
+		List<DTOInvProductos> lista = new ArrayList<DTOInvProductos>();
 		Response res = c
-				.target("http://env-4208164.jelastic.saveincloud.net:8080/minimarketdemoWeb/apirest/auditoria/bitacora")
+				.target("http://moduloinventario.j.layershift.co.uk/minimarketdemoWeb/apirest/inventario/listainventario")
 				.request(MediaType.APPLICATION_JSON).get();
 		DTOInvProductos[] productos = res.readEntity(DTOInvProductos[].class);
-
 		for (DTOInvProductos producto : productos) {
 
-			System.out.println(producto.getnombreProducto());
+			lista.add(producto);
 
 		}
-    }
+		return lista;
+	}
 
 }

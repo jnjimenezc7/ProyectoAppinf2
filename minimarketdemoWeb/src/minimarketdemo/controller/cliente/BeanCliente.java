@@ -18,6 +18,7 @@ import minimarketdemo.controller.JSFUtil;
 import minimarketdemo.model.cliente.manager.ManagerCliente;
 import minimarketdemo.model.core.entities.AudBitacora;
 import minimarketdemo.model.core.entities.TblCliente;
+import minimarketdemo.model.productos.dto.DTOInvProductos;
 
 @Named
 @SessionScoped
@@ -37,15 +38,13 @@ public class BeanCliente implements Serializable {
 	private void inicializar() {
 		Client c = ClientBuilder.newClient();
 		Response res = c
-				.target("http://env-4208164.jelastic.saveincloud.net:8080/minimarketdemoWeb/apirest/auditoria/bitacora")
+				.target("http://moduloinventario.j.layershift.co.uk/minimarketdemoWeb/apirest/inventario/listainventario")
 				.request(MediaType.APPLICATION_JSON).get();
 		// Response response = c.request(MediaType.APPLICATION_JSON).get();
-		AudBitacora[] bitacora = res.readEntity(AudBitacora[].class);
+		DTOInvProductos[] listProducto = res.readEntity(DTOInvProductos[].class);
 
-		for (AudBitacora audBitacora : bitacora) {
-
-			System.out.println(audBitacora.getDescripcionEvento());
-
+		for (DTOInvProductos dtoInvProductos : listProducto) {
+			System.out.println(dtoInvProductos.getNombreproducto());
 		}
 		
 		listaClientes = mCliente.findAllUsuario();

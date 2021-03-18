@@ -2,88 +2,50 @@ package minimarketdemo.model.productos.dto;
 
 public class DTOInvProductos {
 
-	private String codigoProducto;
-	private Boolean iva;
-	private double costo;
-	private String nombreProducto;
-	private double pvp;
-	private Integer cantidad;
-	private Integer idCategoriaProducto;
+	private String codproducto;
+	private double iva;
+	private String nombreproducto;
+	private double preciopvp;
+	private int cantidad;
+	private double preciounitario;
+	
 
-	// codigoProducto
-	public String getCodigoProducto() {
-		return codigoProducto;
+	public String getCodproducto() {
+		return codproducto;
 	}
-
-	public void setCodigoProducto(String codigoProducto) {
-		this.codigoProducto = codigoProducto;
+	public void setCodproducto(String codproducto) {
+		this.codproducto = codproducto;
 	}
-
-	// iva
-	public Boolean getiva() {
+	public double getIva() {
 		return iva;
 	}
-
-	public void setiva(Boolean iva) {
+	public void setIva(double iva) {
 		this.iva = iva;
 	}
-
-	// costo
-	public double getcosto() {
-		return costo;
+	public String getNombreproducto() {
+		return nombreproducto;
 	}
-
-	public void setcosto(double costo) {
-		this.costo = costo;
+	public void setNombreproducto(String nombreproducto) {
+		this.nombreproducto = nombreproducto;
 	}
-
-	// nombreProducto
-	public String getnombreProducto() {
-		return nombreProducto;
+	public double getPreciopvp() {
+		return preciopvp;
 	}
-
-	public void setnombreProducto(String nombreProducto) {
-		this.nombreProducto = nombreProducto;
+	public void setPreciopvp(double preciopvp) {
+		this.preciopvp = preciopvp;
 	}
-
-	// pvp
-	public double getpvp() {
-		return pvp;
+	public int getCantidad() {
+		return cantidad;
 	}
-
-	public void setpvp(double pvp) {
-		this.pvp = pvp;
-	}
-
-	// cantidad
-	public Integer getcantidad(){
-        return cantidad;
-    }
-
-	public void setcantidad(Integer cantidad) {
+	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
-
-	// idCategoriaProducto
-	public Integer getidCategoriaProducto() {
-		return idCategoriaProducto;
+	public double getPreciounitario() {
+		return preciounitario;
+	}
+	public void setPreciounitario(double preciounitario) {
+		this.preciounitario = preciounitario;
 	}
 
-	public void setidCategoriaProducto(Integer idCategoriaProducto) {
-		this.idCategoriaProducto = idCategoriaProducto;
-	}
-
-	public DTOInvProductos(String codigoProducto, Boolean iva, double costo, String nombreProducto, double pvp,
-			Integer cantidad, Integer idCategoriaProducto) {
-		super();
-		this.codigoProducto = codigoProducto;
-		this.iva = iva;
-		this.costo = costo;
-		this.nombreProducto = nombreProducto;
-		this.pvp = pvp;
-		this.cantidad = cantidad;
-		this.idCategoriaProducto = idCategoriaProducto;
-	}
-	
 	
 }
