@@ -10,14 +10,13 @@
 </f:metadata>
 <h:head></h:head>
 <body>
-<p:growl>
+	<p:growl>
 		<p:autoUpdate>
 		</p:autoUpdate>
 	</p:growl>
 	<h:form>
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
-			<p:menuitem value="Productos" icon="pi pi-briefcase" />
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user">
@@ -31,63 +30,59 @@
 	</h:form>
 
 
-
-
 	<p:commandButton value="Nuevo Cliente" icon="pi pi-pencil"
 		action="/cliente/menu" />
 
 	<h:form id="formFacturas">
-		<p:growl id="mensajeGeneral" showDetail="true" autoUpdate="true"
-			life="3000"></p:growl>
 		<p:panel id="panel" styleClass="panel">
 			<f:facet name="header">
 				<h:outputText value="Módulo Facturación" />
 			</f:facet>
-
-
 			<p:staticMessage severity="info" summary="Ingresar Cliente"></p:staticMessage>
 			<p:panelGrid id="GridBuscarDatosCliente" columns="5">
-				<p:outputLabel value="Código cliente:" />
+				<p:outputLabel value="Identificación del Cliente:" />
 				<p:inputText id="txtBuscarCliente" value="#{beanFacturacion.cedula}"
 					style="font-size: 12pt" />
 				<p:commandButton value="Buscar" resetValues="true"
 					update=":formFacturas:gridDatosCliente"
 					actionListener="#{beanFacturacion.actionListenerfindByIdCliente()}"
 					icon="pi pi-search" />
-				<!-- <p:commandButton value="Ver Clientes"                
+				<p:commandButton value="Ver Clientes"
 					oncomplete="PF('dialogoClientes').show();"
-					icon="pi pi-external-link" /> -->
+					icon="pi pi-external-link" />
 			</p:panelGrid>
-			<!-- Método para buscar cliente en value  en beancliente.codigoCliente, en update es para actualizar los datos del cliente y en Modificar traer otro cliente-->
 			<p:separator />
 
 
-
-			<h:panelGrid id="gridDatosCliente" columns="2">
-				<p:staticMessage severity="info" summary="Detalles del Cliente"></p:staticMessage>
-				<h:panelGrid columns="2">
-
-					<p:outputLabel value="Nombre:" />
-					<p:outputLabel id="lblNombreCliente"
-						value="#{beanFacturacion.cliente.nombres}" />
+			<h:panelGrid id="gridDatosCliente" columns="2" layout="flex"
+				styleClass="showcase-text-align-center">
+				<h:panelGrid>
+					<p:staticMessage severity="info" summary="Detalles del Cliente"></p:staticMessage>
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Identificación: " />
+						<p:outputLabel value="#{beanFacturacion.cliente.identificacion}" />
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Nombres: " />
+						<p:outputLabel id="lblNombreCliente"
+							value="#{beanFacturacion.cliente.nombres}" />
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Dirección: " />
+						<p:outputLabel id="lblDireccionCliente"
+							value="#{beanFacturacion.cliente.direccion}" />
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Teléfono: " />
+						<p:outputLabel id="lblTelefonoCLiente"
+							value="#{beanFacturacion.cliente.telefono}" />
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Correo: " />
+						<p:outputLabel id="lblCorreoCliente"
+							value="#{beanFacturacion.cliente.correo}" />
+					</h:panelGrid>
 				</h:panelGrid>
-				<h:panelGrid columns="2">
-					<p:outputLabel value="Dirección:" />
-					<p:outputLabel id="lblDireccionCliente"
-						value="#{beanFacturacion.cliente.direccion}" />
-				</h:panelGrid>
-				<h:panelGrid columns="2">
-					<p:outputLabel value="Teléfono:" />
-					<p:outputLabel id="lblTelefonoCLiente"
-						value="#{beanFacturacion.cliente.telefono}" />
-				</h:panelGrid>
-				<h:panelGrid columns="2">
-					<p:outputLabel value="Correo:" />
-					<p:outputLabel id="lblCorreoCliente"
-						value="#{beanFacturacion.cliente.correo}" />
-				</h:panelGrid>
-				<!-- Métodos para traer datos del cliente -->
-
 				<h:panelGrid>
 					<p:staticMessage severity="info" summary="Detalles de la Factura"></p:staticMessage>
 					<h:outputLabel value="FACTURA #:" style="font-size: 20pt;color:red" />
@@ -104,38 +99,36 @@
 			<p:separator />
 			<p:panelGrid columns="4">
 				<p:outputLabel value="Código de Producto:" />
-				<p:inputText id="txtBuscarProducto" value="#{beanProducto.codigoProd}"
-					style="font-size: 12pt" />
-				<p:commandButton value="Buscar" 
+				<p:inputText id="txtBuscarProducto"
+					value="#{beanProducto.codigoProd}" style="font-size: 12pt" />
+				<p:commandButton value="Buscar"
 					actionListener="#{beanProducto.actionListenerfindProductosByCodigo()}"
 					icon="pi pi-search" />
-				<!-- <p:commandButton value="Ver Productos" styleClass="btnModificar"
-					oncomplete="PF('dialogoProducto').show();"
-					icon="pi pi-external-link" /> -->
+				<p:commandButton value="Ver Productos" icon="pi pi-briefcase"
+					styleClass="btnModificar"
+					oncomplete="PF('dialogoProducto').show();" />
 			</p:panelGrid>
 			<p:separator />
 
-			<p:dataTable id="tablaProductos" var="producto"
-				value="#{ventasbeen.listadetallefactura}"
-				rowStyleClass="ejemplo, ejemplo2"
-				emptyMessage="No se han encontrado registros."
-				styleClass="table table-bordered table-striped">
+			<p:dataTable id="tablaProductos" value="#{beanProducto.carrito}"
+				var="c" styleClass="table table-bordered table-striped">
 				<f:facet name="header">
-					<h:outputText value="Productos" style="color: white;" />
+					<h:outputText value="Carrito de compras:" />
 				</f:facet>
 				<p:column headerText="Código de Producto">
-					<h:outputText value="#{beanProducto.producto.proCodigoBarra}" />
+					<h:outputText value="#{c.codproducto}" />
 				</p:column>
 				<p:column headerText="Producto">
-					<h:outputText value="#{beanProducto.producto.proNombre}" />
-				</p:column>
+					<h:outputText value="#{c.nombreproducto}" />
+				</p:column >
 				<p:column headerText="Cantidad">
-					<h:outputText value=" 1/u " />
-				</p:column>
-				<p:column headerText="Precio venta">
-					<h:outputText value="#{beanProducto.producto.proPrecio}" />
-				</p:column>
+					<h:outputText value="#{c.cantidad}" />
+				</p:column >
+				<p:column headerText="Precio">
+					<h:outputText value="#{c.preciopvp}" />
+				</p:column >
 				<p:column headerText="Total">
+					<h:outputText value="#{c.preciopvp}" /> <!-- OJO MODIFICAR TOTAL -->
 				</p:column>
 			</p:dataTable>
 
@@ -160,28 +153,31 @@
 			styleClass="dialogoClientes" resizable="false" position="center"
 			responsive="true" draggable="false" closeOnEscape="true">
 			<p:dataTable id="tablaClientes" paginator="true"
-				paginatorPosition="top" style="width: 700px;" var="cl"
-				value="#{beancliente.listaClientes}" rows="5">
-				<f:facet name="header">
-					<h:outputText value="Clientes" style="color: white;" />
-				</f:facet>
-				<p:column headerText="N°">
-					<h:outputText value="#{cl.idCliente}" />
+				paginatorPosition="top" style="width: 800px;"
+				value="#{beanCliente.listaClientes}" var="u"
+				rowStyleClass="#{u.estado le false ? 'cheap' : null}">
+				<p:column headerText="Identificación" filterBy="#{u.identificacion}"
+					filterMatchMode="contains">
+					<h:outputText value="#{u.identificacion}" />
 				</p:column>
-				<p:column headerText="Nombre">
-					<h:outputText value="#{cl.cliNombre} #{cl.cliApellidos}" />
+				<p:column headerText="Nombres" filterBy="#{u.nombres}"
+					filterMatchMode="contains">
+					<h:outputText value="#{u.nombres}" />
 				</p:column>
-				<p:column headerText="Dirección">
-					<h:outputText value="#{cl.cliDireccion}" />
+
+				<p:column headerText="Teléfono" filterBy="#{u.telefono}"
+					filterMatchMode="contains">
+					<h:outputText value="#{u.telefono}" />
 				</p:column>
-				<p:column headerText="Teléfono">
-					<h:outputText value="#{cl.cliTelefono}" />
+				<p:column headerText="Correo" filterBy="#{u.correo}"
+					filterMatchMode="contains">
+					<h:outputText value="#{u.correo}" />
 				</p:column>
-				<p:column headerText="Correo">
-					<h:outputText value="#{cl.cliCorreo}" />
+
+				<p:column headerText="Estado">
+					<p:selectBooleanCheckbox value="#{u.estado}" disabled="true" />
 				</p:column>
 				<p:column headerText="Seleccionar">
-
 					<p:commandButton value="Seleccionar"
 						style="background: #158B4C; color:#FEFEFE; "
 						actionListener="#{beancliente.agregarDatosCliente(cl.idCliente)}"
@@ -203,34 +199,43 @@
 			showEffect="explode" hideEffect="explode"
 			styleClass="dialogoClientes" resizable="false" position="center"
 			responsive="true" draggable="false" closeOnEscape="true">
-
-
-
 			<p:dataTable id="tablaProdAUX" paginator="true"
-				paginatorPosition="top" style="width: 700px;" var="pro"
-				value="#{DetalleProductoBeen.listadelatte}" rows="5">
-				<f:facet name="header">
-					<h:outputText value="Producto" style="color: white;" />
-				</f:facet>
-				<p:column headerText="N°">
-					<h:outputText value="#{pro.producto.idProducto}" />
+				paginatorPosition="top" style="width: 900px;"
+				value="#{beanProducto.listProductos}" var="p">
+				<p:column headerText="Código del Producto"
+					filterBy="#{p.codproducto}" filterMatchMode="contains">
+					<h:outputText value="#{p.codproducto}" />
 				</p:column>
-				<p:column headerText="Nombre">
-					<h:outputText value="#{pro.producto.proNombre}" />
+				<p:column headerText="Nombre del Producto"
+					filterBy="#{p.nombreproducto}" filterMatchMode="contains">
+					<h:outputText value="#{p.nombreproducto}" />
 				</p:column>
-				<p:column headerText="Precio">
-					<h:outputText value="#{pro.producto.proPrecio}" />
+				<p:column headerText="Precio PVP" filterBy="#{p.preciopvp}"
+					filterMatchMode="contains">
+					<h:outputText value="#{p.preciopvp}" />
+				</p:column>
+				<p:column headerText="Precio Unitario"
+					filterBy="#{p.preciounitario}" filterMatchMode="contains">
+					<h:outputText value="#{p.preciounitario}" />
+				</p:column>
+				<p:column headerText="Cantidad" filterBy="#{p.cantidad}"
+					filterMatchMode="contains">
+					<h:outputText value="#{p.cantidad}" />
+				</p:column>
+				<p:column headerText="IVA" filterBy="#{p.iva}"
+					filterMatchMode="contains">
+					<h:outputText value="#{p.iva}" />
 				</p:column>
 				<p:column headerText="Seleccionar">
-					<p:commandButton value="Seleccionar" styleClass="btnModificar"
-						actionListener="#{ventasbeen.agregarDatosProducto(pro.producto.proCodigoBarra)}"
+					<p:commandButton value="Seleccionar"  styleClass="btn btn-primary"
+						actionListener="#{beanProducto.actionAgregarCarrito(p.codproducto)}"
 						onclick="PF('dialogoProducto').hide();"
 						update=":formFacturas:tablaProductos">
-
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>
 			<center>
+
 				<p:separator />
 				<p:commandButton value="cerrar"
 					style="background: #B40404; color:#FEFEFE; "

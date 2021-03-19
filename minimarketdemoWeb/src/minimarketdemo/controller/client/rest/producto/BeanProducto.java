@@ -1,7 +1,6 @@
 package minimarketdemo.controller.client.rest.producto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -25,6 +24,7 @@ public class BeanProducto implements Serializable {
 	private List<DTOInvProductos> listProductosEncontrados;
 	private String codigoProd;
 	private DTOInvProductos producto;
+	private List<DTOInvProductos> carrito;
 
 	public BeanProducto() {
 		// TODO Auto-generated constructor stub
@@ -35,17 +35,14 @@ public class BeanProducto implements Serializable {
 	  listProductos=managerProducto.ObtenerDatos();
 	}
 
-	
-
-	
+		
 	public void actionListenerfindProductosByCodigo() {
 		boolean encontrado=false;
 		for (DTOInvProductos dtoInvProductos : listProductos) {
 			if(dtoInvProductos.getCodproducto().equals(codigoProd)) {
 				encontrado=true;
 				//listProductosEncontrados.add(dtoInvProductos);
-			}
-				
+			}		
 		}
 		if(encontrado) {
 			JSFUtil.crearMensajeINFO("Producto: "+codigoProd+" encontrado");
@@ -54,6 +51,14 @@ public class BeanProducto implements Serializable {
 		}
 	}
 	
+	public String actionAgregarCarrito(String codigoProd) {
+		//arreglar la cantidad en método carrito estaba como codigo OJO
+		carrito = managerProducto.agregarCarrito(codigoProd, 1, carrito);
+	
+		System.out.print("AGREGAR CARRITO------" + carrito);
+		return "";
+		
+	}
 	
 	public List<DTOInvProductos> getListProductosEncontrados() {
 		return listProductosEncontrados;
@@ -85,6 +90,14 @@ public class BeanProducto implements Serializable {
 
 	public void setProducto(DTOInvProductos producto) {
 		this.producto = producto;
+	}
+
+	public List<DTOInvProductos> getCarrito() {
+		return carrito;
+	}
+
+	public void setCarrito(List<DTOInvProductos> carrito) {
+		this.carrito = carrito;
 	}
 
 
