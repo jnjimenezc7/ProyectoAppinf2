@@ -46,7 +46,7 @@ public class ManagerFacturacion {
     	
     	factura.setFechaFactura(new Date());
     	factura.setNumeroFactura("00001");
-    	factura.setTblCliente(cliente);
+    	factura.setIdCliente(cliente.getIdCliente());
     	montofactura=new BigDecimal(valor);
     	factura.setValorFactura(montofactura);
     	factura.setTipoPago(tipoPago);

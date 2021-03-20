@@ -4,7 +4,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -18,6 +17,7 @@ public class TblCliente implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id_cliente", unique=true, nullable=false)
 	private Integer idCliente;
 
@@ -51,10 +51,6 @@ public class TblCliente implements Serializable {
 
 	@Column(name="valor_limite_credito", nullable=false, precision=131089)
 	private BigDecimal valorLimiteCredito;
-
-	//bi-directional many-to-one association to TblFactura
-	@OneToMany(mappedBy="tblCliente")
-	private List<TblFactura> tblFacturas;
 
 	public TblCliente() {
 	}
@@ -145,28 +141,6 @@ public class TblCliente implements Serializable {
 
 	public void setValorLimiteCredito(BigDecimal valorLimiteCredito) {
 		this.valorLimiteCredito = valorLimiteCredito;
-	}
-
-	public List<TblFactura> getTblFacturas() {
-		return this.tblFacturas;
-	}
-
-	public void setTblFacturas(List<TblFactura> tblFacturas) {
-		this.tblFacturas = tblFacturas;
-	}
-
-	public TblFactura addTblFactura(TblFactura tblFactura) {
-		getTblFacturas().add(tblFactura);
-		tblFactura.setTblCliente(this);
-
-		return tblFactura;
-	}
-
-	public TblFactura removeTblFactura(TblFactura tblFactura) {
-		getTblFacturas().remove(tblFactura);
-		tblFactura.setTblCliente(null);
-
-		return tblFactura;
 	}
 
 }
