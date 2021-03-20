@@ -15,8 +15,8 @@ public class TblDetallePK implements Serializable {
 	@Column(name="id_factura", insertable=false, updatable=false, unique=true, nullable=false)
 	private Integer idFactura;
 
-	@Column(name="id_producto", insertable=false, updatable=false, unique=true, nullable=false)
-	private Integer idProducto;
+	@Column(unique=true, nullable=false, length=20)
+	private String codigoproducto;
 
 	public TblDetallePK() {
 	}
@@ -26,11 +26,11 @@ public class TblDetallePK implements Serializable {
 	public void setIdFactura(Integer idFactura) {
 		this.idFactura = idFactura;
 	}
-	public Integer getIdProducto() {
-		return this.idProducto;
+	public String getCodigoproducto() {
+		return this.codigoproducto;
 	}
-	public void setIdProducto(Integer idProducto) {
-		this.idProducto = idProducto;
+	public void setCodigoproducto(String codigoproducto) {
+		this.codigoproducto = codigoproducto;
 	}
 
 	public boolean equals(Object other) {
@@ -43,14 +43,14 @@ public class TblDetallePK implements Serializable {
 		TblDetallePK castOther = (TblDetallePK)other;
 		return 
 			this.idFactura.equals(castOther.idFactura)
-			&& this.idProducto.equals(castOther.idProducto);
+			&& this.codigoproducto.equals(castOther.codigoproducto);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
 		hash = hash * prime + this.idFactura.hashCode();
-		hash = hash * prime + this.idProducto.hashCode();
+		hash = hash * prime + this.codigoproducto.hashCode();
 		
 		return hash;
 	}

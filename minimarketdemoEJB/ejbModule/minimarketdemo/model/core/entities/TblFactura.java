@@ -26,9 +26,6 @@ public class TblFactura implements Serializable {
 	@Column(name="fecha_factura", nullable=false)
 	private Date fechaFactura;
 
-	@Column(name="id_cliente", nullable=false)
-	private Integer idCliente;
-
 	@Column(name="numero_factura", nullable=false, length=50)
 	private String numeroFactura;
 
@@ -41,6 +38,11 @@ public class TblFactura implements Serializable {
 	//bi-directional many-to-one association to TblDetalle
 	@OneToMany(mappedBy="tblFactura")
 	private List<TblDetalle> tblDetalles;
+
+	//bi-directional many-to-one association to TblCliente
+	@ManyToOne
+	@JoinColumn(name="id_cliente", nullable=false)
+	private TblCliente tblCliente;
 
 	public TblFactura() {
 	}
@@ -59,14 +61,6 @@ public class TblFactura implements Serializable {
 
 	public void setFechaFactura(Date fechaFactura) {
 		this.fechaFactura = fechaFactura;
-	}
-
-	public Integer getIdCliente() {
-		return this.idCliente;
-	}
-
-	public void setIdCliente(Integer idCliente) {
-		this.idCliente = idCliente;
 	}
 
 	public String getNumeroFactura() {
@@ -113,6 +107,14 @@ public class TblFactura implements Serializable {
 		tblDetalle.setTblFactura(null);
 
 		return tblDetalle;
+	}
+
+	public TblCliente getTblCliente() {
+		return this.tblCliente;
+	}
+
+	public void setTblCliente(TblCliente tblCliente) {
+		this.tblCliente = tblCliente;
 	}
 
 }

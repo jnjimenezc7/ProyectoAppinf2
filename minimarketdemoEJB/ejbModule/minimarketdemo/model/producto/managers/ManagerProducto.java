@@ -26,7 +26,7 @@ public class ManagerProducto {
 		// TODO Auto-generated constructor stub
 	}
 
-	public List<DTOInvProductos> ObtenerDatos() {
+	public List<DTOInvProductos> ObtenerProductos() {
 		Client c = ClientBuilder.newClient();
 		List<DTOInvProductos> lista = new ArrayList<DTOInvProductos>();
 		Response res = c.target(
@@ -51,22 +51,30 @@ public class ManagerProducto {
 	 */
 	public List<DTOInvProductos> agregarCarrito(String codProducto, int cantidad, List<DTOInvProductos> carrito) {
 		// busco el codigo
-		List<DTOInvProductos> listaProductos = ObtenerDatos();
+		List<DTOInvProductos> listaProductos = ObtenerProductos();
 		DTOInvProductos producto = new DTOInvProductos();
 		for (DTOInvProductos p : listaProductos) {
-			if (p.getCodproducto() == codProducto) {
+			if (p.getCodproducto().equals(codProducto)) {
 				producto.setCodproducto(p.getCodproducto());
 				producto.setNombreproducto(p.getNombreproducto());
 				producto.setCantidad(cantidad);
+				producto.setIva(p.getIva());;
 				producto.setPreciopvp(p.getPreciopvp());
-				producto.setPreciopvp(p.getPreciopvp() * cantidad);
+				/*if(p.getIva()!=0.0) {
+					double valormasIva=p.getIva()*p.getPreciopvp();
+					producto.setValortotal((p.getPreciopvp()+valormasIva) * cantidad);
+				}else {
+					producto.setValortotal(p.getPreciopvp() * cantidad);
+				}*/
+				producto.setValortotal(p.getPreciopvp() * cantidad);
+				
+				
 				break;
 			}
 		}
 		// si es necesario, se inicializa el carrito de compras:
-		if (carrito == null) {
+		if (carrito == null)
 			carrito = new ArrayList<DTOInvProductos>();
-		}
 		// agregar el producto al carro:
 		carrito.add(producto);
 		System.out.print("DEVUELVO DE MANAGER---" + carrito);

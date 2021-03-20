@@ -120,26 +120,28 @@
 				</p:column>
 				<p:column headerText="Producto">
 					<h:outputText value="#{c.nombreproducto}" />
-				</p:column >
+				</p:column>
 				<p:column headerText="Cantidad">
 					<h:outputText value="#{c.cantidad}" />
-				</p:column >
+				</p:column>
 				<p:column headerText="Precio">
 					<h:outputText value="#{c.preciopvp}" />
-				</p:column >
+				</p:column>
 				<p:column headerText="Total">
-					<h:outputText value="#{c.preciopvp}" /> <!-- OJO MODIFICAR TOTAL -->
+					<h:outputText value="#{c.valortotal}" />
+					<!-- OJO MODIFICAR TOTAL -->
 				</p:column>
 			</p:dataTable>
 
-			<h:panelGrid>
-				<p:outputLabel value="Subtotal: " style="font-size: 15pt" />
-				<p:outputLabel value="IVA: " style="font-size: 15pt" />
-				<p:outputLabel style="font-size: 20pt" value="Total: " />
+			<h:panelGrid id="valorTotal">
+				<p:outputLabel value="Subtotal: #{beanFacturacion.subtotalFactura()}" style="font-size: 15pt" />
+				<p:outputLabel value="IVA: #{beanFacturacion.ivatotalFactura()}" style="font-size: 15pt" />
+				<p:outputLabel style="font-size: 20pt" value="Total: #{beanFacturacion.totalFactura()}"  />
 			</h:panelGrid>
 
 			<p:separator />
 			<p:commandButton value="Registrar" icon="pi pi-briefcase"
+			  actionListener="#{beanFacturacion.actionListenerRegistrarFactura()}"
 				styleClass="ui-button-success" />
 			<p:commandButton value="Imprimir" icon="pi pi-print" />
 			<p:commandButton value="Cancelar" icon="pi pi-trash"
@@ -210,27 +212,25 @@
 					filterBy="#{p.nombreproducto}" filterMatchMode="contains">
 					<h:outputText value="#{p.nombreproducto}" />
 				</p:column>
-				<p:column headerText="Precio PVP" filterBy="#{p.preciopvp}"
-					filterMatchMode="contains">
+				<p:column headerText="Precio Pvp"
+					filterBy="#{p.preciopvp}" filterMatchMode="contains">
 					<h:outputText value="#{p.preciopvp}" />
 				</p:column>
-				<p:column headerText="Precio Unitario"
-					filterBy="#{p.preciounitario}" filterMatchMode="contains">
-					<h:outputText value="#{p.preciounitario}" />
-				</p:column>
-				<p:column headerText="Cantidad" filterBy="#{p.cantidad}"
-					filterMatchMode="contains">
-					<h:outputText value="#{p.cantidad}" />
+				<p:column headerText="Cantidad" 
+					filterMatchMode="contains" >
+					<p:inputText  value="#{p.cantidadProducto}"  >
+					
+					</p:inputText>
 				</p:column>
 				<p:column headerText="IVA" filterBy="#{p.iva}"
 					filterMatchMode="contains">
 					<h:outputText value="#{p.iva}" />
 				</p:column>
 				<p:column headerText="Seleccionar">
-					<p:commandButton value="Seleccionar"  styleClass="btn btn-primary"
-						actionListener="#{beanProducto.actionAgregarCarrito(p.codproducto)}"
+					<p:commandButton value="Seleccionar" styleClass="btn btn-primary"
+						action="#{beanProducto.actionAgregarCarrito(p.codproducto,p)}"
 						onclick="PF('dialogoProducto').hide();"
-						update=":formFacturas:tablaProductos">
+						update=":formFacturas:tablaProductos,:formFacturas:valorTotal">
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>

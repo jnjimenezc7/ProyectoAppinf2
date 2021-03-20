@@ -8,8 +8,16 @@ public class DTOInvProductos {
 	private double preciopvp;
 	private int cantidad;
 	private double preciounitario;
+	private double valortotal;
+	private int cantidadProducto;
 	
 
+	public int getCantidadProducto() {
+		return cantidadProducto;
+	}
+	public void setCantidadProducto(int cantidadProducto) {
+		this.cantidadProducto = cantidadProducto;
+	}
 	public String getCodproducto() {
 		return codproducto;
 	}
@@ -45,6 +53,12 @@ public class DTOInvProductos {
 	}
 	public void setPreciounitario(double preciounitario) {
 		this.preciounitario = preciounitario;
+	}
+	public double getValortotal() {
+		return valortotal;
+	}
+	public void setValortotal(double valortotal) {
+		this.valortotal = valortotal;
 	}
 
 	

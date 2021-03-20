@@ -25,6 +25,7 @@ public class BeanProducto implements Serializable {
 	private String codigoProd;
 	private DTOInvProductos producto;
 	private List<DTOInvProductos> carrito;
+	private int cantidad;
 
 	public BeanProducto() {
 		// TODO Auto-generated constructor stub
@@ -32,7 +33,7 @@ public class BeanProducto implements Serializable {
 
 	@PostConstruct
 	public void inicializar() {
-	  listProductos=managerProducto.ObtenerDatos();
+	  listProductos=managerProducto.ObtenerProductos();
 	}
 
 		
@@ -51,14 +52,15 @@ public class BeanProducto implements Serializable {
 		}
 	}
 	
-	public String actionAgregarCarrito(String codigoProd) {
-		//arreglar la cantidad en método carrito estaba como codigo OJO
-		carrito = managerProducto.agregarCarrito(codigoProd, 1, carrito);
 	
-		System.out.print("AGREGAR CARRITO------" + carrito);
+	public String actionAgregarCarrito(String codigoProd,DTOInvProductos p) {
+		//arreglar la cantidad en método carrito estaba como codigo OJO
+		carrito = managerProducto.agregarCarrito(codigoProd, p.getCantidadProducto(), carrito);
+		//totalFactura();
 		return "";
 		
 	}
+	
 	
 	public List<DTOInvProductos> getListProductosEncontrados() {
 		return listProductosEncontrados;
@@ -100,5 +102,12 @@ public class BeanProducto implements Serializable {
 		this.carrito = carrito;
 	}
 
+	public int getCantidad() {
+		return cantidad;
+	}
+
+	public void setCantidad(int cantidad) {
+		this.cantidad = cantidad;
+	}
 
 }
