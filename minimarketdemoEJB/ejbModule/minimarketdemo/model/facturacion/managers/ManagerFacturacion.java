@@ -1,6 +1,7 @@
 package minimarketdemo.model.facturacion.managers;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,11 +9,13 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import minimarketdemo.model.core.entities.TblCliente;
 import minimarketdemo.model.core.entities.TblDetalle;
 import minimarketdemo.model.core.entities.TblDetallePK;
 import minimarketdemo.model.core.entities.TblFactura;
+import minimarketdemo.model.facturas.dto.DTOTblFactura;
 import minimarketdemo.model.productos.dto.DTOInvProductos;
 
 /**
@@ -71,6 +74,23 @@ public class ManagerFacturacion {
     	
     }
     
+    ///Consulta de la identificacion por medio del idCliente de la tabla Facturacion
+	public String  findClienteByIdCliente(int idCliente){
+		TblCliente c;
+		String sql = "Select b from TblCliente b where b.idCliente=:idCliente";
+		Query q = em.createQuery(sql, TblCliente.class).setParameter("idCliente", idCliente);
+		c = (TblCliente) q.getSingleResult();
+		return c.getIdentificacion()+"";
+	}
+    //listado de faturas Api
+    public List<DTOTblFactura> findAllDTOTblFactura(){
+    	List<DTOTblFactura> listaDTO= new ArrayList<DTOTblFactura>();
+    	for (TblFactura factura: findAllFacturas()) {
+    		DTOTblFactura c= new DTOTblFactura(factura.getNumeroFactura(),findClienteByIdCliente(factura.getIdCliente()),factura.getValorFactura().doubleValue(),factura.getFechaFactura());
+    		listaDTO.add(c);
+    	}//
+    	return listaDTO;
+    }
     
 
 }
