@@ -12,25 +12,25 @@ public class TblDetallePK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="id_factura", insertable=false, updatable=false, unique=true, nullable=false)
-	private Integer idFactura;
-
 	@Column(unique=true, nullable=false, length=20)
 	private String codigoproducto;
 
+	@Column(name="id_factura", insertable=false, updatable=false, unique=true, nullable=false)
+	private Integer idFactura;
+
 	public TblDetallePK() {
-	}
-	public Integer getIdFactura() {
-		return this.idFactura;
-	}
-	public void setIdFactura(Integer idFactura) {
-		this.idFactura = idFactura;
 	}
 	public String getCodigoproducto() {
 		return this.codigoproducto;
 	}
 	public void setCodigoproducto(String codigoproducto) {
 		this.codigoproducto = codigoproducto;
+	}
+	public Integer getIdFactura() {
+		return this.idFactura;
+	}
+	public void setIdFactura(Integer idFactura) {
+		this.idFactura = idFactura;
 	}
 
 	public boolean equals(Object other) {
@@ -42,15 +42,15 @@ public class TblDetallePK implements Serializable {
 		}
 		TblDetallePK castOther = (TblDetallePK)other;
 		return 
-			this.idFactura.equals(castOther.idFactura)
-			&& this.codigoproducto.equals(castOther.codigoproducto);
+			this.codigoproducto.equals(castOther.codigoproducto)
+			&& this.idFactura.equals(castOther.idFactura);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
-		hash = hash * prime + this.idFactura.hashCode();
 		hash = hash * prime + this.codigoproducto.hashCode();
+		hash = hash * prime + this.idFactura.hashCode();
 		
 		return hash;
 	}

@@ -9,13 +9,13 @@ public class DTOInvProductos {
 	private int cantidad;
 	private double preciounitario;
 	private double valortotal;
-	private int cantidadProducto;
+	private String cantidadProducto;
 	
 
-	public int getCantidadProducto() {
+	public String getCantidadProducto() {
 		return cantidadProducto;
 	}
-	public void setCantidadProducto(int cantidadProducto) {
+	public void setCantidadProducto(String cantidadProducto) {
 		this.cantidadProducto = cantidadProducto;
 	}
 	public String getCodproducto() {

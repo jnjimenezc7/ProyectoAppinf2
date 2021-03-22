@@ -5,16 +5,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import minimarketdemo.model.core.managers.ManagerDAO;
 import minimarketdemo.model.core.entities.TblCliente;
 import minimarketdemo.model.core.entities.TblDetalle;
 import minimarketdemo.model.core.entities.TblDetallePK;
 import minimarketdemo.model.core.entities.TblFactura;
+import minimarketdemo.model.core.entities.TblModoPago;
 import minimarketdemo.model.facturas.dto.DTOTblFactura;
 import minimarketdemo.model.productos.dto.DTOInvProductos;
 
@@ -31,6 +34,7 @@ public class ManagerFacturacion {
 	@PersistenceContext
 	private EntityManager em;
 	
+	
     public ManagerFacturacion() {
         // TODO Auto-generated constructor stub
     }
@@ -39,38 +43,67 @@ public class ManagerFacturacion {
     	return em.createNamedQuery("TblFactura.findAll", TblFactura.class).getResultList();
     }
     
+    public TblFactura obtenerUltimoRegistro() {
+    	TblFactura f=null;
+    	try {
+    		Query q = em.createQuery("SELECT t FROM TblFactura t order by t.numeroFactura desc",TblFactura.class).setMaxResults(1);
+    		f=(TblFactura) q.getSingleResult();
+    		System.out.println("Esta es la lista  "+f.getValorFactura());
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+    	return f;
+
+    }
     
+    public List<TblModoPago> findAllModoPago(){
+    	return em.createNamedQuery("TblModoPago.findAll", TblModoPago.class).getResultList();
+    }
    
-    public void registrarFactura(TblCliente cliente,double valor, String tipoPago) throws Exception{
+    public void registrarFactura(TblCliente cliente,double valor, TblModoPago modoPago,List<DTOInvProductos> detalle) throws Exception{
     	TblFactura factura=new TblFactura();
     	BigDecimal montofactura;
     	if(cliente==null)
     		throw new Exception("Registre un cliente");
     	
     	factura.setFechaFactura(new Date());
-    	factura.setNumeroFactura("00001");
-    	factura.setIdCliente(cliente.getIdCliente());
+    	factura.setNumeroFactura("00056");
     	montofactura=new BigDecimal(valor);
     	factura.setValorFactura(montofactura);
-    	factura.setTipoPago(tipoPago);
+    	factura.setTblCliente(cliente);
+    	factura.setTblModoPago(modoPago);
+    	
     	if(cliente!=null)
     	em.persist(factura);
+    	
+    	factura=obtenerUltimoRegistro();
+    	//System.out.println("IIIIIIIIIIIIIIIIIIIDDDDDDDDDDDDDDFFCA"+factura.getIdFactura());
+    	registrarDetalle(factura, detalle);
     }
     
     
-    public void registrarDetalle(Integer idFactura,List<DTOInvProductos> productos) {
-    	TblDetallePK dp=new TblDetallePK();
-    	BigDecimal montofactura;
-    	//dp.setCodigoproducto(nuemeroFactura);
-    	dp.setIdFactura(idFactura);
+    public void registrarDetalle(TblFactura factura,List<DTOInvProductos> productos)throws Exception {
+    	BigDecimal pu;
     	TblDetalle detalle=new TblDetalle();
-    	for (DTOInvProductos dtoInvProductos : productos) {
-    		//dp.setCodigoproducto(dtoInvProductos.getCodproducto());
+    	for (DTOInvProductos dtoInvProductos : productos) {;
+    		detalle.setTblFactura(factura);
 			detalle.setCantidad(dtoInvProductos.getCantidad());
-			montofactura=new BigDecimal(dtoInvProductos.getPreciounitario());
-			detalle.setPreciounitariocompra(montofactura);
-			//detalle.set
+			pu=new BigDecimal(dtoInvProductos.getPreciounitario());
+			detalle.setPreciounitariocompra(pu);
+			detalle.setId(guardarPKdetalle(factura.getIdFactura(),dtoInvProductos.getCodproducto()));
+			em.persist(detalle);
 		}
+    	
+    	
+    }
+    public TblDetallePK guardarPKdetalle(int idFactura,String codigoprod) {
+    	TblDetallePK dtp=new TblDetallePK();
+    	dtp.setIdFactura(idFactura);
+    	dtp.setCodigoproducto(codigoprod);
+    return dtp;
+    }
+    public void guardardetallefactura(TblDetalle detalle) {
+    	
     	
     }
     
@@ -86,7 +119,7 @@ public class ManagerFacturacion {
     public List<DTOTblFactura> findAllDTOTblFactura(){
     	List<DTOTblFactura> listaDTO= new ArrayList<DTOTblFactura>();
     	for (TblFactura factura: findAllFacturas()) {
-    		DTOTblFactura c= new DTOTblFactura(factura.getNumeroFactura(),findClienteByIdCliente(factura.getIdCliente()),factura.getValorFactura().doubleValue(),factura.getFechaFactura());
+    		DTOTblFactura c= new DTOTblFactura(factura.getNumeroFactura(),findClienteByIdCliente(factura.getTblCliente().getIdCliente()),factura.getValorFactura().doubleValue(),factura.getFechaFactura());
     		listaDTO.add(c);
     	}//
     	return listaDTO;

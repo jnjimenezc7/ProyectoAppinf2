@@ -14,6 +14,7 @@ import minimarketdemo.controller.client.rest.producto.BeanProducto;
 import minimarketdemo.model.cliente.manager.ManagerCliente;
 import minimarketdemo.model.core.entities.TblCliente;
 import minimarketdemo.model.core.entities.TblFactura;
+import minimarketdemo.model.core.entities.TblModoPago;
 import minimarketdemo.model.facturacion.managers.ManagerFacturacion;
 import minimarketdemo.model.producto.managers.ManagerProducto;
 import minimarketdemo.model.productos.dto.DTOInvProductos;
@@ -36,6 +37,7 @@ public class BeanFacturacion implements Serializable {
 	@Inject
 	private BeanProducto producto;
 	private List<TblFactura> listFactura;
+	private List<TblModoPago> listModoPago;
 	private TblCliente cliente;
 	private String cedula;
 	
@@ -44,6 +46,7 @@ public class BeanFacturacion implements Serializable {
 	@PostConstruct
 	public void inicializar() {
 		//listFactura = managerFacturacion.findAllFacturas();
+	managerFacturacion.obtenerUltimoRegistro();
 		cedula="";
 	}
 
@@ -106,8 +109,11 @@ public class BeanFacturacion implements Serializable {
 	
 	
 	public void actionListenerRegistrarFactura() {
+		
 		try {
-			managerFacturacion.registrarFactura(cliente,totalFactura(),"efectivo");
+			listModoPago=managerFacturacion.findAllModoPago();
+			TblModoPago mp=listModoPago.get(0);
+			managerFacturacion.registrarFactura(cliente,totalFactura(),mp,producto.getCarrito());
 			JSFUtil.crearMensajeINFO("Factura registrada");
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());

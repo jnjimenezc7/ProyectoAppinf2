@@ -55,8 +55,13 @@ public class BeanProducto implements Serializable {
 	
 	public String actionAgregarCarrito(String codigoProd,DTOInvProductos p) {
 		//arreglar la cantidad en método carrito estaba como codigo OJO
-		carrito = managerProducto.agregarCarrito(codigoProd, p.getCantidadProducto(), carrito);
-		//totalFactura();
+		
+		if(managerProducto.validaCantidad(p.getCantidadProducto())) {
+			carrito = managerProducto.agregarCarrito(codigoProd, p.getCantidadProducto(), carrito);
+		}else {
+			JSFUtil.crearMensajeERROR("Error la cantidad es incorrecta");
+		}
+		p.setCantidadProducto("");
 		return "";
 		
 	}

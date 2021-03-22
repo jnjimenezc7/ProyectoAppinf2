@@ -34,7 +34,7 @@ public class ManagerProducto {
 				.request(MediaType.APPLICATION_JSON).get();
 		DTOInvProductos[] productos = res.readEntity(DTOInvProductos[].class);
 		for (DTOInvProductos producto : productos) {
-
+			producto.setCantidadProducto("");
 			lista.add(producto);
 
 		}
@@ -49,7 +49,7 @@ public class ManagerProducto {
 	 * @param carrito  la lista que representa al carrito de compra
 	 * @return el carrito de compra con los nuevos productos.
 	 */
-	public List<DTOInvProductos> agregarCarrito(String codProducto, int cantidad, List<DTOInvProductos> carrito) {
+	public List<DTOInvProductos> agregarCarrito(String codProducto, String cantidad, List<DTOInvProductos> carrito) {
 		// busco el codigo
 		List<DTOInvProductos> listaProductos = ObtenerProductos();
 		DTOInvProductos producto = new DTOInvProductos();
@@ -57,18 +57,17 @@ public class ManagerProducto {
 			if (p.getCodproducto().equals(codProducto)) {
 				producto.setCodproducto(p.getCodproducto());
 				producto.setNombreproducto(p.getNombreproducto());
-				producto.setCantidad(cantidad);
-				producto.setIva(p.getIva());;
+				producto.setCantidad(Integer.parseInt(cantidad));
+				producto.setIva(p.getIva());
+				;
 				producto.setPreciopvp(p.getPreciopvp());
-				/*if(p.getIva()!=0.0) {
-					double valormasIva=p.getIva()*p.getPreciopvp();
-					producto.setValortotal((p.getPreciopvp()+valormasIva) * cantidad);
-				}else {
-					producto.setValortotal(p.getPreciopvp() * cantidad);
-				}*/
-				producto.setValortotal(p.getPreciopvp() * cantidad);
-				
-				
+				/*
+				 * if(p.getIva()!=0.0) { double valormasIva=p.getIva()*p.getPreciopvp();
+				 * producto.setValortotal((p.getPreciopvp()+valormasIva) * cantidad); }else {
+				 * producto.setValortotal(p.getPreciopvp() * cantidad); }
+				 */
+				producto.setValortotal(p.getPreciopvp() * Integer.parseInt(cantidad));
+
 				break;
 			}
 		}
@@ -79,7 +78,14 @@ public class ManagerProducto {
 		carrito.add(producto);
 		System.out.print("DEVUELVO DE MANAGER---" + carrito);
 		return carrito;
-		
+
+	}
+
+	public boolean validaCantidad(String cantidad) {
+		if (!(cantidad.matches("[0-9]*"))||cantidad.equals("0")||cantidad.equals("")) {
+			return false;
+		}
+		return true;
 	}
 
 }

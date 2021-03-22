@@ -26,14 +26,8 @@ public class TblFactura implements Serializable {
 	@Column(name="fecha_factura", nullable=false)
 	private Date fechaFactura;
 
-	@Column(name="id_cliente", nullable=false)
-	private Integer idCliente;
-
 	@Column(name="numero_factura", nullable=false, length=50)
 	private String numeroFactura;
-
-	@Column(name="tipo_pago", nullable=false, length=50)
-	private String tipoPago;
 
 	@Column(name="valor_factura", nullable=false, precision=131089)
 	private BigDecimal valorFactura;
@@ -41,6 +35,16 @@ public class TblFactura implements Serializable {
 	//bi-directional many-to-one association to TblDetalle
 	@OneToMany(mappedBy="tblFactura")
 	private List<TblDetalle> tblDetalles;
+
+	//bi-directional many-to-one association to TblCliente
+	@ManyToOne
+	@JoinColumn(name="id_cliente", nullable=false)
+	private TblCliente tblCliente;
+
+	//bi-directional many-to-one association to TblModoPago
+	@ManyToOne
+	@JoinColumn(name="id_mpago")
+	private TblModoPago tblModoPago;
 
 	public TblFactura() {
 	}
@@ -61,28 +65,12 @@ public class TblFactura implements Serializable {
 		this.fechaFactura = fechaFactura;
 	}
 
-	public Integer getIdCliente() {
-		return this.idCliente;
-	}
-
-	public void setIdCliente(Integer idCliente) {
-		this.idCliente = idCliente;
-	}
-
 	public String getNumeroFactura() {
 		return this.numeroFactura;
 	}
 
 	public void setNumeroFactura(String numeroFactura) {
 		this.numeroFactura = numeroFactura;
-	}
-
-	public String getTipoPago() {
-		return this.tipoPago;
-	}
-
-	public void setTipoPago(String tipoPago) {
-		this.tipoPago = tipoPago;
 	}
 
 	public BigDecimal getValorFactura() {
@@ -113,6 +101,22 @@ public class TblFactura implements Serializable {
 		tblDetalle.setTblFactura(null);
 
 		return tblDetalle;
+	}
+
+	public TblCliente getTblCliente() {
+		return this.tblCliente;
+	}
+
+	public void setTblCliente(TblCliente tblCliente) {
+		this.tblCliente = tblCliente;
+	}
+
+	public TblModoPago getTblModoPago() {
+		return this.tblModoPago;
+	}
+
+	public void setTblModoPago(TblModoPago tblModoPago) {
+		this.tblModoPago = tblModoPago;
 	}
 
 }
