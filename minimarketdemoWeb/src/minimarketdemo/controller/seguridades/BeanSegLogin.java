@@ -17,6 +17,7 @@ import minimarketdemo.model.seguridades.managers.ManagerSeguridades;
 @Named
 @SessionScoped
 public class BeanSegLogin implements Serializable {
+	private String correo;
 	private int idSegUsuario;
 	private String clave;
 	private LoginDTO loginDTO;
@@ -30,7 +31,7 @@ public class BeanSegLogin implements Serializable {
 	
 	public String actionLogin() {
 		try {
-			loginDTO=mSeguridades.login(idSegUsuario, clave);
+			loginDTO=mSeguridades.login(correo, clave);
 			return "menu?faces-redirect=true";
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
@@ -123,6 +124,14 @@ public class BeanSegLogin implements Serializable {
 
 	public void setLoginDTO(LoginDTO loginDTO) {
 		this.loginDTO = loginDTO;
+	}
+
+	public String getCorreo() {
+		return correo;
+	}
+
+	public void setCorreo(String correo) {
+		this.correo = correo;
 	}
 
 }

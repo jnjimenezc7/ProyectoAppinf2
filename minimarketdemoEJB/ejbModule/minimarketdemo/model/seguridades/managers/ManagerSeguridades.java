@@ -96,7 +96,17 @@ public class ManagerSeguridades {
      * @return La ruta de acceso al sistema.
      * @throws Exception
      */
-    public LoginDTO login(int idSegUsuario,String clave) throws Exception{
+    public LoginDTO login(String correo,String clave) throws Exception{
+    	int idSegUsuario=0;
+    	List<SegUsuario> listUsuario=mDAO.findAll(SegUsuario.class);
+    	for (SegUsuario segUsuario : listUsuario) {
+			if (correo.equals(segUsuario.getCorreo())) {
+				idSegUsuario= segUsuario.getIdSegUsuario();
+			}
+			
+		}
+    
+    	
     	if(ModelUtil.isEmpty(clave)) {
     		mAuditoria.mostrarLog(getClass(), "login", "Debe indicar una clave "+idSegUsuario);
     		throw new Exception("Debe indicar una clave");
@@ -125,9 +135,51 @@ public class ManagerSeguridades {
     		}
     		return loginDTO;
     	}
+    	
+    
     	mAuditoria.mostrarLog(getClass(), "login", "No coincide la clave "+idSegUsuario);
     	throw new Exception("Error en credenciales");
     }
+    
+    
+    /*
+         public LoginDTO login(int idSegUsuario,String clave) throws Exception{
+    	if(ModelUtil.isEmpty(clave)) {
+    		mAuditoria.mostrarLog(getClass(), "login", "Debe indicar una clave "+idSegUsuario);
+    		throw new Exception("Debe indicar una clave");
+    	}
+    	SegUsuario usuario=(SegUsuario) mDAO.findById(SegUsuario.class, idSegUsuario);
+    	if(usuario==null) {
+    		mAuditoria.mostrarLog(getClass(), "login", "No existe usuario "+idSegUsuario);
+    		throw new Exception("Error en credenciales.");
+    	}
+    		
+    	if(usuario.getClave().equals(clave)) {
+    		if(usuario.getActivo()==false) {
+        		mAuditoria.mostrarLog(getClass(), "login", "Intento de login usuario desactivado "+idSegUsuario);
+        		throw new Exception("El usuario esta desactivado.");
+        	}
+    		mAuditoria.mostrarLog(getClass(), "login", "Login exitoso "+idSegUsuario);
+    		//crear DTO:
+    		LoginDTO loginDTO=new LoginDTO();
+    		loginDTO.setIdSegUsuario(usuario.getIdSegUsuario());
+    		loginDTO.setCorreo(usuario.getCorreo());
+    		//obtener la lista de modulos a los que tiene acceso:
+    		List<SegAsignacion> listaAsignaciones=findAsignacionByUsuario(usuario.getIdSegUsuario());
+    		for(SegAsignacion asig:listaAsignaciones) {
+    			SegModulo modulo=asig.getSegModulo();
+    			loginDTO.getListaModulos().add(modulo);
+    		}
+    		return loginDTO;
+    	}
+    	
+    
+    	mAuditoria.mostrarLog(getClass(), "login", "No coincide la clave "+idSegUsuario);
+    	throw new Exception("Error en credenciales");
+    }
+    
+     */
+    
     
     public void cerrarSesion(int idSegUsuario) {
     	mAuditoria.mostrarLog(getClass(), "cerrarSesion", "Cerrar sesión usuario: "+idSegUsuario);
@@ -146,7 +198,7 @@ public class ManagerSeguridades {
     }
     
     public void insertarUsuario(SegUsuario nuevoUsuario) throws Exception {
-    	nuevoUsuario.setCodigo("n/a");
+    	nuevoUsuario.setCodigo("cajero");
     	mDAO.insertar(nuevoUsuario);
     }
     

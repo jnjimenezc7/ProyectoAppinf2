@@ -16,10 +16,10 @@
 		<h:form>
 			<p:panel>
 				<p:panelGrid columns="2">
-					<h:outputText value="Id de usuario:" />
-					<p:inputText value="#{beanSegLogin.idSegUsuario}" />
+					<h:outputText value="Correo:" />
+					<p:inputText value="#{beanSegLogin.correo}" type="email" required="true" requiredMessage="Debe ingresar correo"/>
 					<h:outputText value="Clave:" />
-					<p:password value="#{beanSegLogin.clave}" />
+					<p:password value="#{beanSegLogin.clave}" required="true" requiredMessage="Debe ingresar clave"/>
 					<p:commandButton value="Login"
 						action="#{beanSegLogin.actionLogin()}" icon="pi pi-key"></p:commandButton>
 				</p:panelGrid>
