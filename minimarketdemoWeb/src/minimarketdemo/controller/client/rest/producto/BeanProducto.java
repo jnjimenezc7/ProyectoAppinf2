@@ -1,6 +1,7 @@
 package minimarketdemo.controller.client.rest.producto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -66,8 +67,10 @@ public class BeanProducto implements Serializable {
 		
 	}
 	
-	
-	public List<DTOInvProductos> getListProductosEncontrados() {
+	public void limpiar(){
+		carrito= new ArrayList<DTOInvProductos>();
+	}
+		public List<DTOInvProductos> getListProductosEncontrados() {
 		return listProductosEncontrados;
 	}
 

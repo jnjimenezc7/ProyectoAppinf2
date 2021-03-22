@@ -29,6 +29,7 @@ public class BeanCliente implements Serializable {
 	private ManagerCliente mCliente;
 	private TblCliente nuevoCliente;
 	private TblCliente edicionCliente;
+	private String cedula;
 
 	public BeanCliente() {
 
@@ -36,17 +37,7 @@ public class BeanCliente implements Serializable {
 
 	@PostConstruct
 	private void inicializar() {
-		Client c = ClientBuilder.newClient();
-		Response res = c
-				.target("http://moduloinventario.j.layershift.co.uk/minimarketdemoWeb/apirest/inventario/listainventario")
-				.request(MediaType.APPLICATION_JSON).get();
-		// Response response = c.request(MediaType.APPLICATION_JSON).get();
-		DTOInvProductos[] listProducto = res.readEntity(DTOInvProductos[].class);
-
-		for (DTOInvProductos dtoInvProductos : listProducto) {
-			System.out.println(dtoInvProductos.getNombreproducto());
-		}
-		
+			
 		listaClientes = mCliente.findAllUsuario();
 		
 		nuevoCliente = new TblCliente();
@@ -54,14 +45,40 @@ public class BeanCliente implements Serializable {
 
 	}
 
-	public List<TblCliente> getListaClientes() {
-		return listaClientes;
+	public void Limpiar() {
+		nuevoCliente = new TblCliente();
 	}
+
+	public void actionListenerfindByIdCliente() {
+		try {
+			 nuevoCliente = mCliente.findClienteByCedula(cedula);
+			 if(nuevoCliente.getEstado())
+				 cedula=nuevoCliente.getIdentificacion();
+			JSFUtil.crearMensajeINFO("Usuario encontrdo");
+			
+			if(nuevoCliente.getEstado()==false) {
+				JSFUtil.crearMensajeWARN("Usuario no esta activo");
+
+				nuevoCliente=new TblCliente();
+			}
+				
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			nuevoCliente=new TblCliente();
+			JSFUtil.crearMensajeERROR("Usuaro no encontrado");
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+	
 
 	public void actionListenerFindClienteByCedula(String cedula) {
 
 		try {
-			mCliente.findClienteByCedula(cedula);
+			 nuevoCliente= mCliente.findClienteByCedula(cedula);
+			 cedula=nuevoCliente.getIdentificacion();
 			JSFUtil.crearMensajeINFO("Usuario encontrado");
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
@@ -69,6 +86,11 @@ public class BeanCliente implements Serializable {
 			e.printStackTrace();
 		}
 
+	}
+
+	
+	public List<TblCliente> getListaClientes() {
+		return listaClientes;
 	}
 
 	public void setListaClientes(List<TblCliente> listaClientes) {
@@ -118,6 +140,14 @@ public class BeanCliente implements Serializable {
 
 	public void setEdicionCliente(TblCliente edicionCliente) {
 		this.edicionCliente = edicionCliente;
+	}
+
+	public String getCedula() {
+		return cedula;
+	}
+
+	public void setCedula(String cedula) {
+		this.cedula = cedula;
 	}
 
 }

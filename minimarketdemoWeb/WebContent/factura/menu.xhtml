@@ -41,11 +41,11 @@
 			<p:staticMessage severity="info" summary="Ingresar Cliente"></p:staticMessage>
 			<p:panelGrid id="GridBuscarDatosCliente" columns="5">
 				<p:outputLabel value="Identificación del Cliente:" />
-				<p:inputText id="txtBuscarCliente" value="#{beanFacturacion.cedula}"
+				<p:inputText id="txtBuscarCliente" value="#{beanCliente.cedula}"
 					style="font-size: 12pt" />
 				<p:commandButton value="Buscar" resetValues="true"
 					update=":formFacturas:gridDatosCliente"
-					actionListener="#{beanFacturacion.actionListenerfindByIdCliente()}"
+					actionListener="#{beanCliente.actionListenerfindByIdCliente()}"
 					icon="pi pi-search" />
 				<p:commandButton value="Ver Clientes"
 					oncomplete="PF('dialogoClientes').show();"
@@ -60,32 +60,32 @@
 					<p:staticMessage severity="info" summary="Detalles del Cliente"></p:staticMessage>
 					<h:panelGrid columns="2">
 						<p:outputLabel value="Identificación: " />
-						<p:outputLabel value="#{beanFacturacion.cliente.identificacion}" />
+						<p:outputLabel value="#{beanCliente.nuevoCliente.identificacion}" />
 					</h:panelGrid>
 					<h:panelGrid columns="2">
 						<p:outputLabel value="Nombres: " />
 						<p:outputLabel id="lblNombreCliente"
-							value="#{beanFacturacion.cliente.nombres}" />
+							value="#{beanCliente.nuevoCliente.nombres}" />
 					</h:panelGrid>
 					<h:panelGrid columns="2">
 						<p:outputLabel value="Dirección: " />
 						<p:outputLabel id="lblDireccionCliente"
-							value="#{beanFacturacion.cliente.direccion}" />
+							value="#{beanCliente.nuevoCliente.direccion}" />
 					</h:panelGrid>
 					<h:panelGrid columns="2">
 						<p:outputLabel value="Teléfono: " />
 						<p:outputLabel id="lblTelefonoCLiente"
-							value="#{beanFacturacion.cliente.telefono}" />
+							value="#{beanCliente.nuevoCliente.telefono}" />
 					</h:panelGrid>
 					<h:panelGrid columns="2">
 						<p:outputLabel value="Correo: " />
 						<p:outputLabel id="lblCorreoCliente"
-							value="#{beanFacturacion.cliente.correo}" />
+							value="#{beanCliente.nuevoCliente.correo}" />
 					</h:panelGrid>
 				</h:panelGrid>
 				<h:panelGrid>
 					<p:staticMessage severity="info" summary="Detalles de la Factura"></p:staticMessage>
-					<h:outputLabel value="FACTURA #:" style="font-size: 20pt;color:red" />
+					<h:outputLabel value="FACTURA # :FAC-000-0#{beanFacturacion.actionListenerNumeroFacturacion()}" style="font-size: 20pt;color:red" />
 					<h:outputLabel value="#{beanfactura.factura.idFactura}"
 						style="font-size: 20pt; color:red" />
 					<h:panelGrid columns="2">
@@ -93,7 +93,11 @@
 						<p:clock pattern="dd/MMM/yyyy   HH:mm:ss" />
 					</h:panelGrid>
 					<!-- Traer método para idfactura -->
-				</h:panelGrid>
+				</h:panelGrid>  
+				<h5>Modo de pago</h5>          
+            <p:selectOneRadio id="modoPago" value="#{beanFacturacion.tipoPago}" layout="grid" columns="2" styleClass="grid-radio">
+            <f:selectItems value="#{beanFacturacion.listModoPago}" var="mp" itemLabel="#{mp.nombre}" itemValue="#{mp.idMpago}"/>
+        </p:selectOneRadio>
 			</h:panelGrid>
 
 			<p:separator />
@@ -107,6 +111,7 @@
 				<p:commandButton value="Ver Productos" icon="pi pi-briefcase"
 					styleClass="btnModificar"
 					oncomplete="PF('dialogoProducto').show();" />
+					
 			</p:panelGrid>
 			<p:separator />
 
@@ -141,11 +146,15 @@
 
 			<p:separator />
 			<p:commandButton value="Registrar" icon="pi pi-briefcase"
+			update=":formFacturas"
 			  actionListener="#{beanFacturacion.actionListenerRegistrarFactura()}"
 				styleClass="ui-button-success" />
 			<p:commandButton value="Imprimir" icon="pi pi-print" />
 			<p:commandButton value="Cancelar" icon="pi pi-trash"
-				styleClass="ui-button-danger" />
+				styleClass="ui-button-danger" 
+				update=":formFacturas"
+				actionListener="#{beanFacturacion.actionListenerLimpiar()}"
+				/>
 		</p:panel>
 
 
@@ -181,10 +190,11 @@
 				</p:column>
 				<p:column headerText="Seleccionar">
 					<p:commandButton value="Seleccionar"
-						style="background: #158B4C; color:#FEFEFE; "
-						actionListener="#{beancliente.agregarDatosCliente(cl.idCliente)}"
+						style="background: #158B4C; color:#FEFEFE;"
+						actionListener="#{beanCliente.actionListenerFindClienteByCedula(u.identificacion)}"
 						oncomplete="PF('dialogoClientes').hide();"
-						update=":formFacturas:gridDatosCliente">
+						update=":formFacturas:gridDatosCliente,:formFacturas:GridBuscarDatosCliente">
+						
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>

@@ -56,6 +56,7 @@ public class ManagerProducto {
 		for (DTOInvProductos p : listaProductos) {
 			if (p.getCodproducto().equals(codProducto)) {
 				producto.setCodproducto(p.getCodproducto());
+				producto.setPreciounitario(p.getPreciounitario());
 				producto.setNombreproducto(p.getNombreproducto());
 				producto.setCantidad(Integer.parseInt(cantidad));
 				producto.setIva(p.getIva());

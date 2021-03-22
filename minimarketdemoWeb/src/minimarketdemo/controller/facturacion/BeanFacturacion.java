@@ -11,6 +11,7 @@ import javax.inject.Named;
 
 import minimarketdemo.controller.JSFUtil;
 import minimarketdemo.controller.client.rest.producto.BeanProducto;
+import minimarketdemo.controller.cliente.BeanCliente;
 import minimarketdemo.model.cliente.manager.ManagerCliente;
 import minimarketdemo.model.core.entities.TblCliente;
 import minimarketdemo.model.core.entities.TblFactura;
@@ -28,46 +29,28 @@ public class BeanFacturacion implements Serializable {
 	@EJB
 	private ManagerFacturacion managerFacturacion;
 	
-	@EJB
-	private ManagerCliente managerCliente;
 	
 	@EJB 
 	private ManagerProducto managerProducto;
 	
 	@Inject
 	private BeanProducto producto;
+	
+	@Inject
+	private BeanCliente cliente;
 	private List<TblFactura> listFactura;
 	private List<TblModoPago> listModoPago;
-	private TblCliente cliente;
-	private String cedula;
+	private int tipoPago;
+
 	
 	
 
 	@PostConstruct
 	public void inicializar() {
 		//listFactura = managerFacturacion.findAllFacturas();
+		listModoPago=managerFacturacion.findAllModoPago();
 	managerFacturacion.obtenerUltimoRegistro();
-		cedula="";
-	}
-
-	public void actionListenerfindByIdCliente() {
-		try {
-			 cliente = managerCliente.findClienteByCedula(cedula);
-			 if(cliente.getEstado())
-			JSFUtil.crearMensajeINFO("Usuario encontrdo");
-			
-			if(cliente.getEstado()==false) {
-				JSFUtil.crearMensajeWARN("Usuario no esta activo");
-				cliente=new TblCliente();
-			}
-				
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			cliente=new TblCliente();
-			JSFUtil.crearMensajeERROR("Usuaro no encontrado");
-			e.printStackTrace();
-		}
-		
+	actionListenerNumeroFacturacion();
 		
 	}
 	
@@ -107,26 +90,32 @@ public class BeanFacturacion implements Serializable {
 		return valor;
 	}
 	
+	public int actionListenerNumeroFacturacion() {
+        try {
+             int numeros = managerFacturacion.obtenerUltimoRegistroFactura();
+            return numeros;     
+        } catch (Exception e) {
+            JSFUtil.crearMensajeINFO("Error");  
+        }
+        return 0;   
+    }
 	
 	public void actionListenerRegistrarFactura() {
 		
 		try {
-			listModoPago=managerFacturacion.findAllModoPago();
-			TblModoPago mp=listModoPago.get(0);
-			managerFacturacion.registrarFactura(cliente,totalFactura(),mp,producto.getCarrito());
-			JSFUtil.crearMensajeINFO("Factura registrada");
+				TblModoPago mp=listModoPago.get(tipoPago);
+				managerFacturacion.registrarFactura(cliente.getNuevoCliente(),totalFactura(),mp,producto.getCarrito());
+				JSFUtil.crearMensajeINFO("Factura registrada");	
+				actionListenerLimpiar();
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 		}
 	}
-	public TblCliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(TblCliente cliente) {
-		this.cliente = cliente;
-	}
-
+	
+ public void actionListenerLimpiar() {
+	 cliente.Limpiar();
+	 producto.limpiar();
+ }
 	public List<TblFactura> getListFactura() {
 		return listFactura;
 	}
@@ -135,13 +124,26 @@ public class BeanFacturacion implements Serializable {
 		this.listFactura = listFactura;
 	}
 
-	public String getCedula() {
-		return cedula;
+
+	public int getTipoPago() {
+		return tipoPago;
 	}
 
-	public void setCedula(String cedula) {
-		this.cedula = cedula;
+
+	public void setTipoPago(int tipoPago) {
+		this.tipoPago = tipoPago;
 	}
+
+
+	public List<TblModoPago> getListModoPago() {
+		return listModoPago;
+	}
+
+
+	public void setListModoPago(List<TblModoPago> listModoPago) {
+		this.listModoPago = listModoPago;
+	}
+
 	
 
 }

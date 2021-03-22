@@ -148,7 +148,7 @@ public class TblCliente implements Serializable {
 		this.valorLimiteCredito = valorLimiteCredito;
 	}
 
-	public List<TblFactura> getTblFacturas() {
+	/*public List<TblFactura> getTblFacturas() {
 		return this.tblFacturas;
 	}
 
@@ -168,6 +168,6 @@ public class TblCliente implements Serializable {
 		tblFactura.setTblCliente(null);
 
 		return tblFactura;
-	}
+	}*/
 
 }

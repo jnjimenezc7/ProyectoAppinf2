@@ -48,13 +48,31 @@ public class ManagerFacturacion {
     	try {
     		Query q = em.createQuery("SELECT t FROM TblFactura t order by t.numeroFactura desc",TblFactura.class).setMaxResults(1);
     		f=(TblFactura) q.getSingleResult();
-    		System.out.println("Esta es la lista  "+f.getValorFactura());
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
     	return f;
 
     }
+    public int obtenerUltimoRegistroFactura() {
+    	int nFactura=0;
+    	try {
+    		TblFactura f= obtenerUltimoRegistro();
+    		if(f==null)
+    			nFactura=1;
+    		
+        	nFactura= Integer.parseInt(f.getNumeroFactura());
+        	nFactura++;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+    	return nFactura;
+    	
+    
+    	
+    		
+
+    	}
     
     public List<TblModoPago> findAllModoPago(){
     	return em.createNamedQuery("TblModoPago.findAll", TblModoPago.class).getResultList();
@@ -63,22 +81,20 @@ public class ManagerFacturacion {
     public void registrarFactura(TblCliente cliente,double valor, TblModoPago modoPago,List<DTOInvProductos> detalle) throws Exception{
     	TblFactura factura=new TblFactura();
     	BigDecimal montofactura;
-    	if(cliente==null)
-    		throw new Exception("Registre un cliente");
-    	
-    	factura.setFechaFactura(new Date());
-    	factura.setNumeroFactura("00056");
-    	montofactura=new BigDecimal(valor);
-    	factura.setValorFactura(montofactura);
-    	factura.setTblCliente(cliente);
-    	factura.setTblModoPago(modoPago);
-    	
-    	if(cliente!=null)
-    	em.persist(factura);
-    	
-    	factura=obtenerUltimoRegistro();
-    	//System.out.println("IIIIIIIIIIIIIIIIIIIDDDDDDDDDDDDDDFFCA"+factura.getIdFactura());
-    	registrarDetalle(factura, detalle);
+    		if(cliente.getIdentificacion()==null) 
+    			throw new Exception("Debe seleccionar un usuario");
+    		if(detalle==null) 
+    			throw new Exception("Debe ingresar al menos un producto");
+    		
+    		factura.setFechaFactura(new Date());
+    	    factura.setNumeroFactura(obtenerUltimoRegistroFactura()+"");
+    	    montofactura=new BigDecimal(valor);
+    	    factura.setValorFactura(montofactura);
+    	    factura.setTblCliente(cliente);
+    	    factura.setTblModoPago(modoPago);
+    	    em.persist(factura);
+    	    factura=obtenerUltimoRegistro();
+    	    registrarDetalle(factura, detalle);
     }
     
     
@@ -91,7 +107,7 @@ public class ManagerFacturacion {
 			pu=new BigDecimal(dtoInvProductos.getPreciounitario());
 			detalle.setPreciounitariocompra(pu);
 			detalle.setId(guardarPKdetalle(factura.getIdFactura(),dtoInvProductos.getCodproducto()));
-			em.persist(detalle);
+			em.merge(detalle);
 		}
     	
     	
